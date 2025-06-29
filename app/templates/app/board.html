@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{{ thread.thread_name }}</title>
+        <style>
+            :root {
+                --background: #36393f;
+                --sidebar: #2f3136;
+                --text: #dcddde;
+                --text-muted: #72767d;
+                --accent: #5865f2;
+                --hover: #40444b;
+                --border-radius: 5px;
+                --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family:
+                    "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+
+            body {
+                background-color: var(--background);
+                color: var(--text);
+                display: flex;
+                min-height: 100vh;
+                font-size: 16px;
+            }
+
+            .content {
+                flex: 1;
+                padding: 20px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .field {
+                background-color: var(--sidebar);
+                padding: 15px;
+                border-radius: var(--border-radius);
+                margin-bottom: 20px;
+                box-shadow: var(--shadow);
+            }
+
+            h1 {
+                font-size: 24px;
+                font-weight: 600;
+                margin-bottom: 10px;
+                color: var(--text);
+            }
+
+            .field p {
+                color: var(--text-muted);
+                font-size: 14px;
+            }
+
+            .date {
+                background-color: var(--sidebar);
+                padding: 10px 15px;
+                border-radius: var(--border-radius);
+                color: var(--text-muted);
+                font-size: 14px;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+
+            h2 {
+                font-size: 20px;
+                font-weight: 600;
+                margin: 20px 0 10px;
+                color: var(--text);
+            }
+
+            h3 {
+                font-size: 18px;
+                font-weight: 600;
+                margin: 20px 0 10px;
+                color: var(--text);
+            }
+
+            .comment {
+                background-color: var(--sidebar);
+                padding: 10px 15px;
+                border-radius: var(--border-radius);
+                margin-bottom: 10px;
+                box-shadow: var(--shadow);
+                transition: background-color 0.2s;
+            }
+
+            .comment:hover {
+                background-color: var(--hover);
+            }
+
+            .comment p {
+                color: var(--text);
+                font-size: 16px;
+            }
+
+            .comment .timestamp {
+                color: var(--text-muted);
+                font-size: 12px;
+                margin-top: 5px;
+            }
+
+            .no-comments {
+                color: var(--text-muted);
+                font-style: italic;
+                background-color: var(--sidebar);
+                padding: 10px 15px;
+                border-radius: var(--border-radius);
+                margin-bottom: 10px;
+                box-shadow: var(--shadow);
+            }
+
+            .comment-form {
+                background-color: var(--sidebar);
+                padding: 15px;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                margin-bottom: 20px;
+            }
+
+            textarea {
+                width: 100%;
+                min-height: 100px;
+                background-color: #40444b;
+                border: none;
+                border-radius: var(--border-radius);
+                padding: 10px;
+                color: var(--text);
+                font-size: 14px;
+                resize: vertical;
+                margin-bottom: 10px;
+            }
+
+            textarea:focus {
+                outline: none;
+                background-color: #484c52;
+            }
+
+            button {
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: var(--accent);
+                color: white;
+                border: none;
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                transition: background-color 0.2s;
+                font-weight: 500;
+            }
+
+            button:hover {
+                background-color: #4752c4;
+            }
+
+            a {
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: var(--accent);
+                color: white;
+                text-decoration: none;
+                border-radius: var(--border-radius);
+                margin: 10px 10px 0 0;
+                transition: background-color 0.2s;
+                font-weight: 500;
+            }
+
+            a:hover {
+                background-color: #4752c4;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="field">
+                <h1>{{ thread.thread_name }}</h1>
+                <p>Board ID: {{ board_slug }}</p>
+            </div>
+            <p class="date">今日は {% now "Y年m月d日" %} です</p>
+            <h2>Comments</h2>
+            {% if comments %} {% for comment in comments %}
+            <div class="comment">
+                <p>
+                    {{ comment.content }}
+                    <span class="timestamp"
+                        >(Posted on {{ comment.created_at }})</span
+                    >
+                </p>
+            </div>
+            {% empty %}
+            <p class="no-comments">No comments yet.</p>
+            {% endfor %} {% else %}
+            <p class="no-comments">No comments available.</p>
+            {% endif %}
+            <h3>Add a Comment</h3>
+            <div class="comment-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <textarea name="content" required></textarea>
+                    <button type="submit">Post Comment</button>
+                </form>
+            </div>
+            <a href="{% url 'index' %}">戻る</a>
+        </div>
+    </body>
+</html>

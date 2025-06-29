@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <style>
+        .content {
+            padding-left: 30px;
+        }
+    </style>
+    <body class="content">
+        <h2>ログイン</h2>
+        <form method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <button type="submit">ログイン</button>
+        </form>
+    </body>
+</html>
