@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 
 
 
-@login_required
 def index(request):
     name_list = list(Thread.objects.values_list('thread_name', flat=True))
 
